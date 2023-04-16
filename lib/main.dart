@@ -1,0 +1,149 @@
+import 'package:flutter/material.dart';
+import 'Park.dart';
+import 'package:buttons_flutter/buttons_flutter.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<Park> parks = [
+    Park(parkName: "Park Point", numberOfTimesCleaned: 0),
+    Park(parkName: "Fake park 1", numberOfTimesCleaned: 0),
+    Park(parkName: "Fake Park 2", numberOfTimesCleaned: 0)
+  ];
+
+  Widget parkTemplate(Park park) {
+    return Card(
+      color: Colors.green[100],
+      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+        //Row is breaking stuff
+        // child: Row(
+        //   children: <Widget>[
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  park.parkName,
+                  style: const TextStyle(
+                    fontSize: 25,
+                    color: Colors.greenAccent
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 6.0),
+                Text(
+                  'Cleaned ${park.numberOfTimesCleaned} times',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.green[500]
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 6.0),
+                Text(
+                  'Last cleaned ${park.getTimeSinceLastCleaned()}'
+                      ' days ago on ${park.getDate()}',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.green[300]
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 6.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Button(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 20
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 20
+                      ),
+                      bgColor: Colors.green[600],
+                      child: const Text(
+                        'Just Cleaned!'
+                      ),
+                      onPressed: () {setState(() {
+                        park.cleanPark();
+                      });},
+                    ),
+                    Button(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 20
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 20
+                      ),
+                      bgColor: Colors.red[400],
+                      child: const Text(
+                        'Undo Cleaned'
+                      ),
+                      onPressed: () {setState(() {
+                        park.subtractNumberOfTimesCleaned();
+                      });},
+                    )
+                  ],
+                )
+
+              ],
+            )
+            // SizedBox(width: 3.0, height: 3.0)
+            // Column(
+            //   children: [
+            //     IconButton(
+            //       onPressed: () {park.cleanPark();},
+            //       icon: const Icon(Icons.add)
+            //     ),
+            //     IconButton(
+            //       onPressed: () {park.subtractNumberOfTimesCleaned();},
+            //       icon: const Icon(Icons.exposure_minus_1)
+            //     )
+            //   ],
+            // )
+          // ],
+        // ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Trash App',
+          style: TextStyle(
+            fontSize: 30.0,
+            letterSpacing: 3,
+          ),
+          ),
+        centerTitle: true,
+        backgroundColor: Colors.green[900],
+      ),
+      body: Container(
+        color: Colors.yellow[150],
+        child: Column(
+          children: parks.map((park) => parkTemplate(park)).toList()
+          ),
+      )
+    );
+  }
+}
+
+void main() {
+
+  runApp(const MaterialApp(
+    home: HomeScreen()),
+  );
+}
