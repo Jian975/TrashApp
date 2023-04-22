@@ -15,7 +15,16 @@ class UserSecureStorage {
   }
   
   static Future<List<Park>?> getParks() async {
-    final value = await _storage.read(key: _keyParks);
+    final String? value = await _storage.read(key: _keyParks);
+    List<Park> parks = [];
+    if(value != null) {
+      Map<String, dynamic> jsonMap = jsonDecode(value);
+      jsonMap.forEach((key, value) {
+        parks.add(
+          Park.fromJson(json)
+        )
+      })
+    }
 
     return value == null ? null : List<Park>.from(jsonDecode(value));
   }
