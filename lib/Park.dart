@@ -11,7 +11,9 @@ class Park{
   }
 
   subtractNumberOfTimesCleaned() {
-    numberOfTimesCleaned--;
+    if(numberOfTimesCleaned > 0){
+      numberOfTimesCleaned--;
+    }
   }
 
   int getTimeSinceLastCleaned() {

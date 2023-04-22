@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trash_app/user_secure_storage.dart';
 import 'Park.dart';
 import 'package:buttons_flutter/buttons_flutter.dart';
 
@@ -10,11 +11,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Park> parks = [
-    Park(parkName: "Park Point", numberOfTimesCleaned: 0),
-    Park(parkName: "Fake park 1", numberOfTimesCleaned: 0),
-    Park(parkName: "Fake Park 2", numberOfTimesCleaned: 0)
-  ];
+  List<Park> parks = [];
+  // List<Park> parks = [
+  //   Park(parkName: "Park Point", numberOfTimesCleaned: 0),
+  //   Park(parkName: "Fake park 1", numberOfTimesCleaned: 0),
+  //   Park(parkName: "Fake Park 2", numberOfTimesCleaned: 0)
+  // ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    init();
+  }
 
   Widget parkTemplate(Park park) {
     return Card(
@@ -98,25 +107,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
               ],
             )
-            // SizedBox(width: 3.0, height: 3.0)
-            // Column(
-            //   children: [
-            //     IconButton(
-            //       onPressed: () {park.cleanPark();},
-            //       icon: const Icon(Icons.add)
-            //     ),
-            //     IconButton(
-            //       onPressed: () {park.subtractNumberOfTimesCleaned();},
-            //       icon: const Icon(Icons.exposure_minus_1)
-            //     )
-            //   ],
-            // )
-          // ],
-        // ),
       ),
     );
   }
 
+  Future init() async {
+    UserSecureStorage.setParks([
+      Park(parkName: "Park Point", numberOfTimesCleaned: 0),
+      Park(parkName: "Fake park 1", numberOfTimesCleaned: 0),
+      Park(parkName: "Fake Park 2", numberOfTimesCleaned: 0)
+    ]);
+    final parks = await UserSecureStorage.getParks() ?? [];
+
+    setState(() {
+      this.parks = parks;
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,4 +153,5 @@ void main() {
   runApp(const MaterialApp(
     home: HomeScreen()),
   );
+
 }
